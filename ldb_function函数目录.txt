@@ -1,0 +1,3 @@
+getIPLoc	根据IP地址，获取IP地区
+is_mobile	判断是否为手机
+isIP	判断是否为合法IP

@@ -1,0 +1,15 @@
+<div style="border:1px solid black;width:500px;height:500px;top:100px;margin:0 auto;">
+<div style="margin:100px auto;width:100px;height:20px;"><input type="button" value='action' id="create"/></div>
+<link rel="stylesheet" type="text/css" href="css/style2.css">
+<script src="./js/jquery-1.8.2.js"></script>
+<script src="./js/createFullWindowTag.js"></script>
+<script type="text/javascript">
+$(function(){ 
+	$("#create").click(function(){
+		$url = 'http://localhost/myApp/progress/server/data.php';
+		createFullWindowTag($url,625,200);
+
+	});
+});
+</script>
+</div>
