@@ -1,0 +1,89 @@
+服务端/etc/rsyncd.conf创建和配置：
+#Rsync server
+#created by ldb 17/3/12
+##rsyncd.conf start##
+uid = rsync
+gid = rsync
+use chroot = no
+max connections = 2000
+timeout = 600
+pid file = /var/run/rsyncd.pid
+lock file = /var/run/rsync.lock
+log file = /var/log/rsyncd.log
+ignore errors
+read only = false
+list = false
+hosts allow = 10.0.0.0/24
+hosts deny = 0.0.0.0/32
+auth users = rsync_backup
+secrets file = /etc/rsync.password
+##########################################
+[backup]
+comment = backup by oldOboy 14:18 2017-3-12
+path = /backup
+##########################################
+#[bbs]
+#comment =  bbs by oldOboy 14:18 2017-3-12
+#path = /data0/www/bbs/
+#[blog]
+#comment =  blog by oldOboy 14:18 2017-3-12
+#path = /data0/www/blog/
+
+
+创建用户:useradd rsync -s /sbin/nologin -M
+创建共享目录和授权：
+[root@localhost ~]# mkdir /backup
+[root@localhost ~]# chown -R rsync /backup/
+[root@localhost ~]# ls -ld /backup/
+创建密码文件：
+[root@localhost ~]# echo "rsync_backup:oldboy" > /etc/rsync.password
+[root@localhost ~]# chmod 600 /etc/rsync.password 
+启动：
+rsync --deamon
+netstat -lntup|grep rsync
+ps -ef |grep rsync|grep -v grep
+加入启动项:
+echo "rsync --daemon" >>/etc/rc.local
+
+rsync客户端:
+1、创建密码文件
+echo "oldboy" >/etc/rsync.password
+chmod 600 /etc/rsync.password
+ls -l /etc/rsync.password
+cat /etc/rsync.password
+2、rsync
+push:
+rsync -avz /tmp/ rsync_backup@10.0.0.100::backup --password-file=/etc/rsync.password
+pull:
+rsync -avz rsync_backup@10.0.0.100::backup /tmp/ --password-file=/etc/rsync.password
+--delete：强制一样
+rsync -avz --delete rsync://rsync_backup@10.0.0.100/backup /tmp/ --password-file=/etc/rsync.password
+--exclud{a,b}排除
+
+rsync优点：
+1、增量备份同步，支持socket(daemon),集中备份。
+rsync缺点：
+1、大量小文件同步的时候，比对时间较长，有的时候，rsync进程停止。
+	解决：a.打包同步。b.drbd(文件系统同步复制block)
+2、同步大文件，10G这样的大文件有事也会有问题，中断，位完整同步前，是隐藏文件
+
+实例（定时备份关键文件）：
+mkdir /server/scripts/ -p
+cd /server/scripts/
+vi bak.sh
+##########bak.sh内容##############
+#!/bin/sh
+path=/backup
+nowTime=$(date +%F)
+dir="`ifconfig eth0|awk -F '[ :]+' 'NR==2 {print $4}'`_$nowTime"
+mkdir $path/$dir -p &&\
+/bin/cp /var/spool/cron/root $path/$dir/cron_root_$nowTime &&\
+/bin/cp /etc/rc.local $path/$dir/rc.local_$nowTime &&\
+rsync -az $path/ rsync_backup@10.0.0.100::backup/ --password-file=/etc/rsync.password
+######end#####
+
+执行:
+/bin/sh /server/scripts/bak.sh
+定时任务：
+00 01 * * * /bin/sh /server/scripts/bak.sh >/dev/null 2>&1
+

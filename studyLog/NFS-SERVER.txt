@@ -1,0 +1,7 @@
+安装服务器和客户端:
+yum install -y nfs-utils rpcbind
+vim /etc/exports
+[root@localhost ~]# cat /etc/exports 
+/data	10.0.0.0/24(rw,sync,all_squash)
+安全挂载优化:
+Mount –t nfs –o nosuid,noexec,nodev,noatime,nodiratime,intr,rsize=131072,wsize=131072 10.0.0.10:/data /mnt
