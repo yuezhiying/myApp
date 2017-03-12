@@ -87,3 +87,5 @@ rsync -az $path/ rsync_backup@10.0.0.100::backup/ --password-file=/etc/rsync.pas
 定时任务：
 00 01 * * * /bin/sh /server/scripts/bak.sh >/dev/null 2>&1
 
+扩展:
+把文件传输到其他服务器：scp /server/scripts/bak.sh root@10.0.0.102:/tmp/
