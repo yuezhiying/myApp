@@ -1,0 +1,21 @@
+安装部署：
+http://ftp.linux.ncsu.edu/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+
+rpm -Uvh http://ftp.linux.ncsu.edu/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+
+服务端安装:
+yum install salt-master -y
+/etc/init.d/salt-master start
+chkconfig --list salt-master
+客户端安装：
+yum install salt-minion -y
+vim /etc/salt/minion 
+/etc/init.d/salt-minion start
+chkconfig --list salt-minion
+
+
+
+master:10.0.0.103
+cachedir:/etc/salt/modules
+log_file:/var/log/salt/minion.log
+log_level:warning
