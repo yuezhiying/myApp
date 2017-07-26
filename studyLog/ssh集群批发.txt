@@ -1,0 +1,573 @@
+shh优化：
+Port 52168
+PermitRootLogin no
+PermitEmptyPasswords no
+UseDNS no
+GSSAPIAuthentication no
+
+跨服务器执行命令:
+ssh -p22 root@10.0.100 /sbin/ifconfig eth0
+
+批量创建用户名和密码
+useradd oldgirl
+echo 123456|passwd --stdin oldgirl
+生成秘钥：
+ssh-keygen -t dsa
+[oldgirl@nfs-server ~]$ ls -l .ssh/
+total 8
+-rw-------. 1 oldgirl oldgirl 668 Mar 14 21:21 id_dsa  //秘钥
+-rw-r--r--. 1 oldgirl oldgirl 608 Mar 14 21:21 id_dsa.pub //公钥
+
+
+ ssh-copy-id -i .ssh/id_dsa.pub oldgirl@10.0.0.100
+ ssh-copy-id -i .ssh/id_dsa.pub "-p 52113 oldgirl@10.0.0.100"
+
+echo 'oldgirl ALL=(ALL)       NOPASSWD:/usr/bin/rsync' >>/etc/sudoers
+visudo -c
+grep oldgirl /etc/sudoers
+
+ssh -t oldgirl@10.0.0.102 sudo rsync hosts /etc/
+
+Xshell 5 (Build 0964)
+Copyright (c) 2002-2016 NetSarang Computer, Inc. All rights reserved.
+
+Type `help' to learn how to use Xshell prompt.
+[c:\~]$ 
+
+Connecting to 10.0.0.101:22...
+Connection established.
+To escape to local shell, press 'Ctrl+Alt+]'.
+
+Last login: Tue Mar 14 19:29:43 2017 from 10.0.0.1
+[root@localhost ~]# hostname
+localhost.localdomain
+[root@localhost ~]# hostname nfs-server
+[root@localhost ~]# hostname
+nfs-server
+[root@localhost ~]# vi /etc/sysconfig/network
+[root@localhost ~]# vim /etc/sysconfig/network
+[root@localhost ~]# cat /opt/hosts
+cat: /opt/hosts: No such file or directory
+[root@localhost ~]# cat /etc/host
+host.conf    hosts        hosts.allow  hosts.deny   
+[root@localhost ~]# cat /etc/hosts
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+[root@localhost ~]# vim /etc/host
+host.conf    hosts        hosts.allow  hosts.deny   
+[root@localhost ~]# vim /etc/hosts
+[root@localhost ~]# vim /etc/hosts
+[root@localhost ~]# useradd oldgirl
+[root@localhost ~]# echo 123456|passwd --stdin oldgirl
+Changing password for user oldgirl.
+passwd: all authentication tokens updated successfully.
+[root@localhost ~]# su - oldgirl
+[oldgirl@nfs-server ~]$ ssh-keygen -t dsa
+Generating public/private dsa key pair.
+Enter file in which to save the key (/home/oldgirl/.ssh/id_dsa): 
+Created directory '/home/oldgirl/.ssh'.
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /home/oldgirl/.ssh/id_dsa.
+Your public key has been saved in /home/oldgirl/.ssh/id_dsa.pub.
+The key fingerprint is:
+9a:3e:f7:71:88:70:0d:c3:2f:4e:e5:b6:57:e2:13:65 oldgirl@nfs-server
+The key's randomart image is:
++--[ DSA 1024]----+
+|                 |
+|       .         |
+|        + .   E  |
+|         B   o   |
+|      . S = o .  |
+|       B + + +   |
+|      o o + =    |
+|     .. .  + .   |
+|      .o ..      |
++-----------------+
+[oldgirl@nfs-server ~]$ ls -l .ssh/
+total 8
+-rw-------. 1 oldgirl oldgirl 668 Mar 14 21:21 id_dsa
+-rw-r--r--. 1 oldgirl oldgirl 608 Mar 14 21:21 id_dsa.pub
+[oldgirl@nfs-server ~]$ hostory
+-bash: hostory: command not found
+[oldgirl@nfs-server ~]$ hostory
+-bash: hostory: command not found
+[oldgirl@nfs-server ~]$ hostory
+-bash: hostory: command not found
+[oldgirl@nfs-server ~]$ hostory
+-bash: hostory: command not found
+[oldgirl@nfs-server ~]$ history
+    1  ssh-keygen -t dsa
+    2  ls -l .ssh/
+    3  hostory
+    4  history
+[oldgirl@nfs-server ~]$ ls -l .ssh/
+total 8
+-rw-------. 1 oldgirl oldgirl 668 Mar 14 21:21 id_dsa
+-rw-r--r--. 1 oldgirl oldgirl 608 Mar 14 21:21 id_dsa.pub
+[oldgirl@nfs-server ~]$ ssh-copy-id -i .ssh/id_dsa.pub oldgirl@10.0.0.100
+The authenticity of host '10.0.0.100 (10.0.0.100)' can't be established.
+RSA key fingerprint is 06:63:9d:c6:12:80:b7:9c:6e:f2:7d:23:59:7d:6e:86.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '10.0.0.100' (RSA) to the list of known hosts.
+oldgirl@10.0.0.100's password: 
+Now try logging into the machine, with "ssh 'oldgirl@10.0.0.100'", and check in:
+
+  .ssh/authorized_keys
+
+to make sure we haven't added extra keys that you weren't expecting.
+
+[oldgirl@nfs-server ~]$ ssh-copy-id -i .ssh/id_dsa.pub oldgirl@10.0.0.102
+The authenticity of host '10.0.0.102 (10.0.0.102)' can't be established.
+RSA key fingerprint is 06:63:9d:c6:12:80:b7:9c:6e:f2:7d:23:59:7d:6e:86.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '10.0.0.102' (RSA) to the list of known hosts.
+oldgirl@10.0.0.102's password: 
+Now try logging into the machine, with "ssh 'oldgirl@10.0.0.102'", and check in:
+
+  .ssh/authorized_keys
+
+to make sure we haven't added extra keys that you weren't expecting.
+
+[oldgirl@nfs-server ~]$ ssh -p22 oldgirl@10.0.0.100 /bin/ifconfig etho
+bash: /bin/ifconfig: No such file or directory
+[oldgirl@nfs-server ~]$ ssh -p22 oldgirl@10.0.0.100 /bin/ifconfig eth0
+bash: /bin/ifconfig: No such file or directory
+[oldgirl@nfs-server ~]$ ssh -p22 oldgirl@10.0.0.100 /sbin/ifconfig eth0
+eth0      Link encap:Ethernet  HWaddr 00:0C:29:91:69:26  
+          inet addr:10.0.0.100  Bcast:10.0.0.255  Mask:255.255.255.0
+          inet6 addr: fe80::20c:29ff:fe91:6926/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:674 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:543 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:75077 (73.3 KiB)  TX bytes:72733 (71.0 KiB)
+
+[oldgirl@nfs-server ~]$ ssh -p22 oldgirl@10.0.0.102 /sbin/ifconfig eth0
+eth0      Link encap:Ethernet  HWaddr 00:0C:29:56:52:0B  
+          inet addr:10.0.0.102  Bcast:10.0.0.255  Mask:255.255.255.0
+          inet6 addr: fe80::20c:29ff:fe56:520b/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:422 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:347 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:46191 (45.1 KiB)  TX bytes:42211 (41.2 KiB)
+
+[oldgirl@nfs-server ~]$ history
+    1  ssh-keygen -t dsa
+    2  ls -l .ssh/
+    3  hostory
+    4  history
+    5  ls -l .ssh/
+    6  ssh-copy-id -i .ssh/id_dsa.pub oldgirl@10.0.0.100
+    7  ssh-copy-id -i .ssh/id_dsa.pub oldgirl@10.0.0.102
+    8  ssh -p22 oldgirl@10.0.0.100 /bin/ifconfig etho
+    9  ssh -p22 oldgirl@10.0.0.100 /bin/ifconfig eth0
+   10  ssh -p22 oldgirl@10.0.0.100 /sbin/ifconfig eth0
+   11  ssh -p22 oldgirl@10.0.0.102 /sbin/ifconfig eth0
+   12  history
+[oldgirl@nfs-server ~]$ ll
+total 0
+[oldgirl@nfs-server ~]$ vim view.sh
+[oldgirl@nfs-server ~]$ sh view.sh 
+eth0      Link encap:Ethernet  HWaddr 00:0C:29:91:69:26  
+          inet addr:10.0.0.100  Bcast:10.0.0.255  Mask:255.255.255.0
+          inet6 addr: fe80::20c:29ff:fe91:6926/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:700 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:568 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:79768 (77.8 KiB)  TX bytes:77611 (75.7 KiB)
+
+================================
+eth0      Link encap:Ethernet  HWaddr 00:0C:29:56:52:0B  
+          inet addr:10.0.0.102  Bcast:10.0.0.255  Mask:255.255.255.0
+          inet6 addr: fe80::20c:29ff:fe56:520b/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:450 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:372 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:51014 (49.8 KiB)  TX bytes:47089 (45.9 KiB)
+
+[oldgirl@nfs-server ~]$ sh view.sh 
+eth0      Link encap:Ethernet  HWaddr 00:0C:29:91:69:26  
+          inet addr:10.0.0.100  Bcast:10.0.0.255  Mask:255.255.255.0
+          inet6 addr: fe80::20c:29ff:fe91:6926/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:723 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:591 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:84054 (82.0 KiB)  TX bytes:82369 (80.4 KiB)
+
+================================
+eth0      Link encap:Ethernet  HWaddr 00:0C:29:56:52:0B  
+          inet addr:10.0.0.102  Bcast:10.0.0.255  Mask:255.255.255.0
+          inet6 addr: fe80::20c:29ff:fe56:520b/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:475 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:395 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:55432 (54.1 KiB)  TX bytes:51847 (50.6 KiB)
+
+[oldgirl@nfs-server ~]$ cp /etc/hosts
+hosts        hosts.allow  hosts.deny   
+[oldgirl@nfs-server ~]$ cp /etc/hosts .
+[oldgirl@nfs-server ~]$ ll
+total 8
+-rw-r--r--. 1 oldgirl oldgirl 203 Mar 14 21:36 hosts
+-rw-rw-r--. 1 oldgirl oldgirl 135 Mar 14 21:35 view.sh
+[oldgirl@nfs-server ~]$ scp -P22 hosts oldgirl@10.0.0.100
+[oldgirl@nfs-server ~]$ scp -P22 hosts oldgirl@10.0.0.100:~
+hosts                                                                          100%  203     0.2KB/s   00:00    
+[oldgirl@nfs-server ~]$ vi fenfa.sh
+[oldgirl@nfs-server ~]$ sh fenfa.sh 
+ip: No such file or directory
+-P22: No such file or directory
+hosts                                                                          100%  203     0.2KB/s   00:00    
+ip: No such file or directory
+-P22: No such file or directory
+hosts                                                                          100%  203     0.2KB/s   00:00    
+[oldgirl@nfs-server ~]$ vi fenfa.sh
+[oldgirl@nfs-server ~]$ sh fenfa.sh 
+hosts                                                                          100%  203     0.2KB/s   00:00    
+hosts                                                                          100%  203     0.2KB/s   00:00    
+[oldgirl@nfs-server ~]$ vim hosts 
+[oldgirl@nfs-server ~]$ sh fenfa.sh 
+hosts                                                                          100%  220     0.2KB/s   00:00    
+hosts                                                                          100%  220     0.2KB/s   00:00    
+[oldgirl@nfs-server ~]$ sh fenfa.sh 
+hosts                                                                          100%  220     0.2KB/s   00:00    
+hosts                                                                          100%  220     0.2KB/s   00:00    
+[oldgirl@nfs-server ~]$ sh fenfa.sh 
+hosts                                                                          100%  220     0.2KB/s   00:00    
+hosts                                                                          100%  220     0.2KB/s   00:00    
+[oldgirl@nfs-server ~]$ vim /etc/sh
+shadow   shadow-  shells   
+[oldgirl@nfs-server ~]$ vim /etc/s
+sasl2/              sestatus.conf       smartd.conf         subversion/         sysctl.conf
+scl/                setuptool.d/        sos.conf            sudo.conf           sysctl.d/
+securetty           shadow              ssh/                sudoers             system-release
+security/           shadow-             ssl/                sudoers.d/          system-release-cpe
+selinux/            shells              statetab            sudo-ldap.conf      
+services            skel/               statetab.d/         sysconfig/          
+[oldgirl@nfs-server ~]$ vim /etc/ss
+ssh/ ssl/ 
+[oldgirl@nfs-server ~]$ vim /etc/ssh/
+moduli                sshd_config           ssh_host_dsa_key.pub  ssh_host_key.pub      ssh_host_rsa_key.pub
+ssh_config            ssh_host_dsa_key      ssh_host_key          ssh_host_rsa_key      
+[oldgirl@nfs-server ~]$ vim /etc/ssh/ssh_config 
+[oldgirl@nfs-server ~]$ vim /etc/ssh/sshd_config 
+[oldgirl@nfs-server ~]$ vim /etc/ssh/sshd_config
+[oldgirl@nfs-server ~]$ su -
+Password: 
+[root@nfs-server ~]# vim /etc/ssh/sshd_config 
+[root@nfs-server ~]# echo "UseDNS no">>/etc/ssh/sshd_config 
+[root@nfs-server ~]# vim /etc/ssh/sshd_config 
+[root@nfs-server ~]# vim /etc/ssh/sshd_config
+[root@nfs-server ~]# /etc/init.d/sshd restart
+Stopping sshd:                                             [  OK  ]
+Starting sshd: /etc/ssh/sshd_config: line 81: Bad configuration option: GSSAPIAuthenticationoo
+/etc/ssh/sshd_config: terminating, 1 bad configuration options
+                                                           [FAILED]
+[root@nfs-server ~]# vim /etc/ssh/sshd_config
+[root@nfs-server ~]# vim /etc/ssh/sshd_config
+
+No manual entry for GSSAPIKeyExchange
+
+shell returned 1
+
+Press ENTER or type command to continue
+[No write since last change]
+
+Press ENTER or type command to continue
+[root@nfs-server ~]# vim /etc/ssh/sshd_config
+[root@nfs-server ~]# /etc/init.d/sshd restart
+Stopping sshd:                                             [FAILED]
+Starting sshd:                                             [  OK  ]
+[root@nfs-server ~]# /etc/init.d/sshd restart
+Stopping sshd:                                             [  OK  ]
+Starting sshd:                                             [  OK  ]
+[root@nfs-server ~]# su - oldgirl
+[oldgirl@nfs-server ~]$ pwd
+/home/oldgirl
+[oldgirl@nfs-server ~]$ sh fenfa.sh 
+hosts                                                                          100%  220     0.2KB/s   00:00    
+hosts                                                                          100%  220     0.2KB/s   00:00    
+[oldgirl@nfs-server ~]$ sh fenfa.sh 
+hosts                                                                          100%  220     0.2KB/s   00:00    
+hosts                                                                          100%  220     0.2KB/s   00:00    
+[oldgirl@nfs-server ~]$ sh fenfa.sh 
+hosts                                                                          100%  220     0.2KB/s   00:00    
+hosts                                                                          100%  220     0.2KB/s   00:00    
+[oldgirl@nfs-server ~]$ vim fenfa.sh 
+[oldgirl@nfs-server ~]$ sh fenfa.sh 
+hosts                                                                          100%  220     0.2KB/s   00:00    
+hosts                                                                          100%  220     0.2KB/s   00:00    
+[oldgirl@nfs-server ~]$ vim fenfa.sh 
+[oldgirl@nfs-server ~]$ sh fenfa.sh hosts
+fenfa hosts ok                                             [  OK  ]
+fenfa hosts ok                                             [  OK  ]
+[oldgirl@nfs-server ~]$ ll
+total 16
+-rw-rw-r--. 1 oldgirl oldgirl 213 Mar 14 22:07 fenfa.sh
+-rw-r--r--. 1 oldgirl oldgirl 220 Mar 14 21:41 hosts
+-rw-r--r--. 1 oldgirl oldgirl 203 Mar 14 21:37 oldgirl@10.0.0.100
+-rw-rw-r--. 1 oldgirl oldgirl 135 Mar 14 21:35 view.sh
+[oldgirl@nfs-server ~]$ sh fenfa.sh view.sh 
+fenfa view.sh ok                                           [  OK  ]
+fenfa view.sh ok                                           [  OK  ]
+[oldgirl@nfs-server ~]$ sh fenfa.sh
+fenfa  no                                                  [FAILED]
+fenfa  no                                                  [FAILED]
+[oldgirl@nfs-server ~]$ vim fenfa.sh 
+[oldgirl@nfs-server ~]$ vim fenfa.sh 
+[oldgirl@nfs-server ~]$ sh fenfa.sh
+USAGE:fenfa.sh {FILENAME|DIRNAME}
+[oldgirl@nfs-server ~]$ vim fenfa.sh 
+[oldgirl@nfs-server ~]$ vim fenfa.sh 
+[oldgirl@nfs-server ~]$ ll
+total 16
+-rw-rw-r--. 1 oldgirl oldgirl 288 Mar 14 22:11 fenfa.sh
+-rw-r--r--. 1 oldgirl oldgirl 220 Mar 14 21:41 hosts
+-rw-r--r--. 1 oldgirl oldgirl 203 Mar 14 21:37 oldgirl@10.0.0.100
+-rw-rw-r--. 1 oldgirl oldgirl 135 Mar 14 21:35 view.sh
+[oldgirl@nfs-server ~]$ cp fenfa.sh view.sh 
+[oldgirl@nfs-server ~]$ vim view.sh 
+[oldgirl@nfs-server ~]$ history
+    1  pwd
+    2  sh fenfa.sh 
+    3  vim fenfa.sh 
+    4  sh fenfa.sh 
+    5  vim fenfa.sh 
+    6  sh fenfa.sh hosts
+    7  ll
+    8  sh fenfa.sh view.sh 
+    9  sh fenfa.sh
+   10  vim fenfa.sh 
+   11  sh fenfa.sh
+   12  vim fenfa.sh 
+   13  ll
+   14  cp fenfa.sh view.sh 
+   15  vim view.sh 
+   16  history
+[oldgirl@nfs-server ~]$ vim view.sh 
+[oldgirl@nfs-server ~]$ sh view.sh "ifconfig eth0"
+bash: ifconfig: command not found
+bash: ifconfig: command not found
+[oldgirl@nfs-server ~]$ sh view.sh "/sbin/ifconfig eth0"
+eth0      Link encap:Ethernet  HWaddr 00:0C:29:91:69:26  
+          inet addr:10.0.0.100  Bcast:10.0.0.255  Mask:255.255.255.0
+          inet6 addr: fe80::20c:29ff:fe91:6926/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1423 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:1224 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:181483 (177.2 KiB)  TX bytes:181243 (176.9 KiB)
+
+eth0      Link encap:Ethernet  HWaddr 00:0C:29:56:52:0B  
+          inet addr:10.0.0.102  Bcast:10.0.0.255  Mask:255.255.255.0
+          inet6 addr: fe80::20c:29ff:fe56:520b/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1204 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:1042 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:154135 (150.5 KiB)  TX bytes:146551 (143.1 KiB)
+
+[oldgirl@nfs-server ~]$ sh view.sh 
+USAGE:view.sh {COMMAND}
+[oldgirl@nfs-server ~]$ sh view.sh "/sbin/ifconfig eth0" "cat /etc/redhat-release"
+USAGE:view.sh {COMMAND}
+[oldgirl@nfs-server ~]$ sh view.sh "/sbin/ifconfig eth0","cat /etc/redhat-release"
+Usage:
+  ifconfig [-a] [-v] [-s] <interface> [[<AF>] <address>]
+  [add <address>[/<prefixlen>]]
+  [del <address>[/<prefixlen>]]
+  [[-]broadcast [<address>]]  [[-]pointopoint [<address>]]
+  [netmask <address>]  [dstaddr <address>]  [tunnel <address>]
+  [outfill <NN>] [keepalive <NN>]
+  [hw <HW> <address>]  [metric <NN>]  [mtu <NN>]
+  [[-]trailers]  [[-]arp]  [[-]allmulti]
+  [multicast]  [[-]promisc]
+  [mem_start <NN>]  [io_addr <NN>]  [irq <NN>]  [media <type>]
+  [txqueuelen <NN>]
+  [[-]dynamic]
+  [up|down] ...
+
+  <HW>=Hardware Type.
+  List of possible hardware types:
+    loop (Local Loopback) slip (Serial Line IP) cslip (VJ Serial Line IP) 
+    slip6 (6-bit Serial Line IP) cslip6 (VJ 6-bit Serial Line IP) adaptive (Adaptive Serial Line IP) 
+    strip (Metricom Starmode IP) ash (Ash) ether (Ethernet) 
+    tr (16/4 Mbps Token Ring) tr (16/4 Mbps Token Ring (New)) ax25 (AMPR AX.25) 
+    netrom (AMPR NET/ROM) rose (AMPR ROSE) tunnel (IPIP Tunnel) 
+    ppp (Point-to-Point Protocol) hdlc ((Cisco)-HDLC) lapb (LAPB) 
+    arcnet (ARCnet) dlci (Frame Relay DLCI) frad (Frame Relay Access Device) 
+    sit (IPv6-in-IPv4) fddi (Fiber Distributed Data Interface) hippi (HIPPI) 
+    irda (IrLAP) ec (Econet) x25 (generic X.25) 
+    infiniband (InfiniBand) 
+  <AF>=Address family. Default: inet
+  List of possible address families:
+    unix (UNIX Domain) inet (DARPA Internet) inet6 (IPv6) 
+    ax25 (AMPR AX.25) netrom (AMPR NET/ROM) rose (AMPR ROSE) 
+    ipx (Novell IPX) ddp (Appletalk DDP) ec (Econet) 
+    ash (Ash) x25 (CCITT X.25) 
+Usage:
+  ifconfig [-a] [-v] [-s] <interface> [[<AF>] <address>]
+  [add <address>[/<prefixlen>]]
+  [del <address>[/<prefixlen>]]
+  [[-]broadcast [<address>]]  [[-]pointopoint [<address>]]
+  [netmask <address>]  [dstaddr <address>]  [tunnel <address>]
+  [outfill <NN>] [keepalive <NN>]
+  [hw <HW> <address>]  [metric <NN>]  [mtu <NN>]
+  [[-]trailers]  [[-]arp]  [[-]allmulti]
+  [multicast]  [[-]promisc]
+  [mem_start <NN>]  [io_addr <NN>]  [irq <NN>]  [media <type>]
+  [txqueuelen <NN>]
+  [[-]dynamic]
+  [up|down] ...
+
+  <HW>=Hardware Type.
+  List of possible hardware types:
+    loop (Local Loopback) slip (Serial Line IP) cslip (VJ Serial Line IP) 
+    slip6 (6-bit Serial Line IP) cslip6 (VJ 6-bit Serial Line IP) adaptive (Adaptive Serial Line IP) 
+    strip (Metricom Starmode IP) ash (Ash) ether (Ethernet) 
+    tr (16/4 Mbps Token Ring) tr (16/4 Mbps Token Ring (New)) ax25 (AMPR AX.25) 
+    netrom (AMPR NET/ROM) rose (AMPR ROSE) tunnel (IPIP Tunnel) 
+    ppp (Point-to-Point Protocol) hdlc ((Cisco)-HDLC) lapb (LAPB) 
+    arcnet (ARCnet) dlci (Frame Relay DLCI) frad (Frame Relay Access Device) 
+    sit (IPv6-in-IPv4) fddi (Fiber Distributed Data Interface) hippi (HIPPI) 
+    irda (IrLAP) ec (Econet) x25 (generic X.25) 
+    infiniband (InfiniBand) 
+  <AF>=Address family. Default: inet
+  List of possible address families:
+    unix (UNIX Domain) inet (DARPA Internet) inet6 (IPv6) 
+    ax25 (AMPR AX.25) netrom (AMPR NET/ROM) rose (AMPR ROSE) 
+    ipx (Novell IPX) ddp (Appletalk DDP) ec (Econet) 
+    ash (Ash) x25 (CCITT X.25) 
+[oldgirl@nfs-server ~]$ sh view.sh "cat /etc/redhat-release"
+CentOS release 6.8 (Final)
+CentOS release 6.8 (Final)
+[oldgirl@nfs-server ~]$ sh view.sh "/sbin/ifconfig eth0 \cat /etc/redhat-release"
+cat: No address associated with name
+ifconfig: `--help' gives usage information.
+cat: No address associated with name
+ifconfig: `--help' gives usage information.
+[oldgirl@nfs-server ~]$ sh view.sh "/sbin/ifconfig eth0 &&cat /etc/redhat-release"
+eth0      Link encap:Ethernet  HWaddr 00:0C:29:91:69:26  
+          inet addr:10.0.0.100  Bcast:10.0.0.255  Mask:255.255.255.0
+          inet6 addr: fe80::20c:29ff:fe91:6926/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1523 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:1320 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:199374 (194.7 KiB)  TX bytes:200646 (195.9 KiB)
+
+CentOS release 6.8 (Final)
+eth0      Link encap:Ethernet  HWaddr 00:0C:29:56:52:0B  
+          inet addr:10.0.0.102  Bcast:10.0.0.255  Mask:255.255.255.0
+          inet6 addr: fe80::20c:29ff:fe56:520b/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1330 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:1154 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:174392 (170.3 KiB)  TX bytes:167868 (163.9 KiB)
+
+CentOS release 6.8 (Final)
+[oldgirl@nfs-server ~]$ history
+    1  pwd
+    2  sh fenfa.sh 
+    3  vim fenfa.sh 
+    4  sh fenfa.sh 
+    5  vim fenfa.sh 
+    6  sh fenfa.sh hosts
+    7  ll
+    8  sh fenfa.sh view.sh 
+    9  sh fenfa.sh
+   10  vim fenfa.sh 
+   11  sh fenfa.sh
+   12  vim fenfa.sh 
+   13  ll
+   14  cp fenfa.sh view.sh 
+   15  vim view.sh 
+   16  history
+   17  vim view.sh 
+   18  sh view.sh "ifconfig eth0"
+   19  sh view.sh "/sbin/ifconfig eth0"
+   20  sh view.sh 
+   21  sh view.sh "/sbin/ifconfig eth0" "cat /etc/redhat-release"
+   22  sh view.sh "/sbin/ifconfig eth0","cat /etc/redhat-release"
+   23  sh view.sh "cat /etc/redhat-release"
+   24  sh view.sh "/sbin/ifconfig eth0 \cat /etc/redhat-release"
+   25  sh view.sh "/sbin/ifconfig eth0 &&cat /etc/redhat-release"
+   26  history
+[oldgirl@nfs-server ~]$ vim view.sh 
+[oldgirl@nfs-server ~]$ su -
+Password: 
+[root@nfs-server ~]# oldgirl ALL=(ALL)       NOPASSWD:/usr/bin/rsync
+-bash: syntax error near unexpected token `('
+[root@nfs-server ~]# echo 'oldgirl ALL=(ALL)       NOPASSWD:/usr/bin/rsync' >>/etc/sudoers
+[root@nfs-server ~]# visudo -c
+/etc/sudoers: parsed OK
+[root@nfs-server ~]# grep oldgirl /etc/sudoers
+oldgirl ALL=(ALL)       NOPASSWD:/usr/bin/rsync
+[root@nfs-server ~]# su - olgirl
+su: user olgirl does not exist
+[root@nfs-server ~]# su oldgirl
+[oldgirl@nfs-server root]$ scp -P22 -r hosts oldgirl@10.0.0.100:~
+hosts: Permission denied
+[oldgirl@nfs-server root]$ cd ~
+[oldgirl@nfs-server ~]$ scp -P22 -r hosts oldgirl@10.0.0.100:~
+hosts                                                                          100%  220     0.2KB/s   00:00    
+[oldgirl@nfs-server ~]$ ssh -t oldgirl@10.0.0.102 sudo rsync hosts /etc/
+Connection to 10.0.0.102 closed.
+[oldgirl@nfs-server ~]$ ll
+total 16
+-rw-rw-r--. 1 oldgirl oldgirl 288 Mar 14 22:11 fenfa.sh
+-rw-r--r--. 1 oldgirl oldgirl 220 Mar 14 21:41 hosts
+-rw-r--r--. 1 oldgirl oldgirl 203 Mar 14 21:37 oldgirl@10.0.0.100
+-rw-rw-r--. 1 oldgirl oldgirl 132 Mar 14 22:39 view.sh
+[oldgirl@nfs-server ~]$ cp fenfa.sh fenfa_goods.sh 
+[oldgirl@nfs-server ~]$ vim fenfa_goods.sh 
+[oldgirl@nfs-server ~]$ vim fenfa_goods.sh 
+[oldgirl@nfs-server ~]$ sh fenfa_goods.sh 
+USAGE:fenfa_goods.sh localfile remotedir
+[oldgirl@nfs-server ~]$ vim /etc/hosts
+[oldgirl@nfs-server ~]$ vim hosts 
+[oldgirl@nfs-server ~]$ vim fenfa_goods.sh 
+[oldgirl@nfs-server ~]$ vim fenfa_goods.sh 
+[oldgirl@nfs-server ~]$ sh fenfa_goods.sh hosts /etc
+fenfa_goods.sh: line 11: dev/null: No such file or directory
+fenfa hosts no                                             [FAILED]
+fenfa_goods.sh: line 11: dev/null: No such file or directory
+fenfa hosts no                                             [FAILED]
+[oldgirl@nfs-server ~]$ vim fenfa_goods.sh 
+[oldgirl@nfs-server ~]$ vim fenfa_goods.sh 
+[oldgirl@nfs-server ~]$ sh fenfa_goods.sh hosts /etc
+fenfa hosts no                                             [FAILED]
+fenfa hosts no                                             [FAILED]
+[oldgirl@nfs-server ~]$ vim fenfa_goods.sh 
+[oldgirl@nfs-server ~]$ sh fenfa_goods.sh hosts /etc
+fenfa hosts ok                                             [  OK  ]
+fenfa hosts ok                                             [  OK  ]
+[oldgirl@nfs-server ~]$ vim fenfa_goods.sh 
+
+#!/bin/sh
+#!/bin/sh
+. /etc/init.d/functions
+if [ $# -ne 2 ]
+   then
+        echo "USAGE:$0 localfile remotedir"
+    exit
+fi
+for n in 100 102
+do
+  scp -P22 -r $1 oldgirl@10.0.0.$n:~ &>/dev/null &&\
+  ssh -t oldgirl@10.0.0.$n sudo rsync $1 $2 &>/dev/null
+  if [ $? -eq 0 ]
+     then
+        action "fenfa $1 ok" /bin/true
+     else
+        action "fenfa $1 no" /bin/false
+  fi
+done
+                                                                                          1,1           Top

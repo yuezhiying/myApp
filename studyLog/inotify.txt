@@ -1,0 +1,38 @@
+下载：https://github.com/downloads/rvoicilas/inotify-tools/inotify-tools-3.14.tar.gz
+查看是否支持：
+[root@localhost soft]# ls -l /proc/sys/fs/inotify/
+total 0
+-rw-r--r-- 1 root root 0 Mar 13 21:34 max_queued_events
+-rw-r--r-- 1 root root 0 Mar 13 21:34 max_user_instances
+-rw-r--r-- 1 root root 0 Mar 13 21:34 max_user_watches
+安装：
+./configure --prefix=/usr/local/inotify-tools-3.14
+make && make install
+echo $?   #####查看是否有错误######
+
+ln -s /usr/local/inotify-tools-3.14/ /usr/local/inotify-tools
+
+监控：
+/usr/local/inotify-tools-3.14/bin/inotifywait -mrq --timefmt '%d/%m/%y %H:%M' --format '%T %w%f' -e create,delete,close_write /data
+
+-m:持续监控
+-r:递归
+-q:安静地
+create,delete,close_write:监控:增、删、改
+
+
+vim inotify.sh
+  204  sh -x inotify.sh 
+inotiry.sh文件：
+#!bin/bash
+inotify=/usr/local/inotify-tools/bin/inotifywait
+$inotify -mrq --timefmt '%d/%m/%y %H:%M' --format '%T %w%f' -e create,delete,close_write /data \
+|while read file
+do
+ cd / &&
+ rsync -az ./data --delete rsync_backup@10.0.0.100::backup/ --password-file=/etc/rsync.password
+done
+
+优化：
+echo "50000000" > /proc/sys/fs/inotify/max_user_watches
+echo "50000000" > /proc/sys/fs/inotify/max_queued_events

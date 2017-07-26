@@ -29,6 +29,8 @@ path = /backup
 #comment =  blog by oldOboy 14:18 2017-3-12
 #path = /data0/www/blog/
 
+安全优化(指定访问本地服务器IP)：
+rsync --daemon --adress=10.0.0.100
 
 创建用户:useradd rsync -s /sbin/nologin -M
 创建共享目录和授权：

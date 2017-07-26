@@ -1,0 +1,102 @@
+//创建客户联系表
+create table erp_customer(
+id int(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+customer_name varchar(200) not null COMMENT '公司名称',
+address varchar(200) not null COMMENT '地址',
+area_id int(5) not null comment '所属区域ID',
+level_id int(5) not null comment '客户层级id',
+telephone varchar(50) not null comment '联系电话',
+person varchar(50) not null comment '客户负责人',
+contacts varchar(50) not null comment '联系人',
+contract int(5) not null default 0 comment '合同数',
+contract_amount int(11) not null default 0 comment '合同金额',
+creatTime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP  COMMENT '录入时间',
+status tinyint(1) not null default 1 comment '状态:1:使用中,0:删除',
+index (customer_name),
+index(address),
+index(area_id)
+)CHARSET=utf8 COMMENT='客户列表';
+
+//创建客户区域表
+create table erp_customer_area(
+id int(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+area_name varchar(200) not null COMMENT '区域名',
+status tinyint(1) not null default 1 comment '状态:1:使用中,0:删除',
+creatTime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP  COMMENT '录入时间',
+index(area_name)
+)CHARSET=utf8 COMMENT='客户区域表';
+
+//创建客户层级表
+create table erp_customer_level(
+id int(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+level_name varchar(200) not null COMMENT '客户层级名',
+status tinyint(1) not null default 1 comment '状态:1:使用中,0:删除',
+creatTime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP  COMMENT '录入时间',
+index(level_name)
+)CHARSET=utf8 COMMENT='客户层级表';
+
+//合同表
+create table erp_contract(
+id int(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+contrac_number varchar(50) not null COMMENT '合同编号',
+theme varchar(200) not null COMMENT '合同主题',
+business_opportunity int(5) not null comment '商机',
+customer int(10) not null comment '客户',
+area_id int(5) not null comment '区域ID',
+business int(5) not null comment '业务类型',
+delegate_type int(5) not null comment '委托类型',
+contract_amount int(11) not null default 0 comment '合同金额',
+discount_amount int(11) not null default 0 comment '优惠金额',
+due_amount int(11) not null default 0 comment '到款金额',
+billing_amount int(11) not null default 0 comment '开票金额',
+subpackage_amount int(11) not null default 0 comment '分包金额',
+effective_start datetime NOT NULL COMMENT '有效期起始',
+effective_end datetime NOT NULL COMMENT '有效期结止',
+payType tinyint(2) not null comment '付款方式',
+contrac_main varchar(200) not null COMMENT '合同概要',
+enclosure varchar(200) not null COMMENT '附件',
+SignTime datetime NOT NULL COMMENT '签订日期',
+endTime datetime NOT NULL COMMENT '完结时间',
+linkman int(10) not null comment '联系人',
+spare1 varchar(200) not null COMMENT '备用1',
+spare2 varchar(200) not null COMMENT '备用2',
+user_add_id int(10) not null comment '添加合同用户id',
+status tinyint(1) not null default 1 comment '状态:1:使用中,0:删除',
+creatTime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '录入时间',
+index(contrac_number),
+index(customer),
+index(theme),
+index(business),
+index(area_id),
+index(SignTime),
+index(linkman)
+)CHARSET=utf8 COMMENT='客户层级表';
+
+//创建业务类型表
+create table erp_contract_business(
+id int(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+business_name varchar(200) not null COMMENT '业务类型名',
+status tinyint(1) not null default 1 comment '状态:1:使用中,0:删除',
+creatTime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP  COMMENT '录入时间'
+)CHARSET=utf8 COMMENT='业务类型表';
+
+//创建委托类型表
+create table erp_contract_delegate(
+id int(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+delegate_name varchar(200) not null COMMENT '委托类型名',
+status tinyint(1) not null default 1 comment '状态:1:使用中,0:删除',
+creatTime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP  COMMENT '录入时间'
+)CHARSET=utf8 COMMENT='委托类型表';
+
+//创建付款方式
+create table erp_contract_pay_type(
+id int(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+pay_type_name varchar(200) not null COMMENT '付款方式名',
+status tinyint(1) not null default 1 comment '状态:1:使用中,0:删除',
+creatTime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP  COMMENT '录入时间'
+)CHARSET=utf8 COMMENT='付款方式表';
+
+//添加字段
+ALTER table erp_slme_colum add display tinyint(1) default 1 comment '是否显示:1显示，0:不显示';
+
+ALTER table erp_contract add user_add_id int(10) not null comment '添加合同用户id';
