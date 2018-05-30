@@ -1,0 +1,13 @@
+[root@sh158-xen data]#rpm -ivh MySQL-server-5.5.31-2.el6.i686.rpm
+error: Failed dependencies:
+
+        libaio.so.1 is needed by MySQL-server-5.5.31-2.el6.i686
+        libaio.so.1(LIBAIO_0.1) is needed by MySQL-server-5.5.31-2.el6.i686
+        libaio.so.1(LIBAIO_0.4) is needed by MySQL-server-5.5.31-2.el6.i686
+ 
+纠结了半天，终于找到了解决方法：(感谢提供相关文章的博友)
+在安装包后面加两个参数，如
+[root@VM_55_2_centos mysql]#  rpm -ivh MySQL-server-5.5.31-2.el6.i686.rpm --nodeps --force
+Preparing...                ########################################### [100%]
+   1:MySQL-server           ########################################### [100%]
+ 
