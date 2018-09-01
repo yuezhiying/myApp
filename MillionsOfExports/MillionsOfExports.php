@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * @功能:[这是简易原理版，没涉及数据库等逻辑操作，线上真实项目已运用,百万数据导出不成问题]
+ * @param:
+ * @User:ldb
+ * @创建日期:2017/2/15
+ */
 $baseDir = 'excel/';
 $downloadDir        = __DIR__.'/' ."html/" . $baseDir;
 if (!is_dir($downloadDir)) {
@@ -81,27 +86,16 @@ function generateCell($item) {
 	$output = '';
 	$style = '';
 
-	// Tell Excel to treat as a number. Note that Excel only stores roughly 15 digits, so keep
-	// as text if number is longer than that.
 	if(preg_match("/^-?\d+(?:[.,]\d+)?$/",$item) && (strlen($item) < 15)) {
 		$type = 'Number';
-		/*if($item!=0 && strpos($item, '0') === 0){//add by zqt //add by zqt,以0开头并且!=0的数据当做为String
-			 $type = 'String';
-		 }*/
 	}
-	// Sniff for valid dates; should look something like 2010-07-14 or 7/14/2010 etc. Can
-	// also have an optional time after the date.
-	//
-	// Note we want to be very strict in what we consider a date. There is the possibility
-	// of really screwing up the data if we try to reformat a string that was not actually
-	// intended to represent a date.
 	elseif(preg_match("/^(\d{1,2}|\d{4})[\/\-]\d{1,2}[\/\-](\d{1,2}|\d{4})([^\d].+)?$/",$item) &&
 		($timestamp = strtotime($item)) &&
 		($timestamp > 0) &&
 		($timestamp < strtotime('+500 years'))) {
 		$type = 'DateTime';
 		$item = strftime("%Y-%m-%dT%H:%M:%S",$timestamp);
-		$style = 'sDT'; // defined in header; tells excel to format date for display
+		$style = 'sDT';
 	}
 	else {
 		$type = 'String';
@@ -118,10 +112,7 @@ function generateCell($item) {
 function generateFooter() {
 	$output = '';
 	global $XmlFooter;
-	// worksheet footer
 	$output .= "    </Table>\n</Worksheet>\n";
-
-	// workbook footer
 	$output .= $XmlFooter;
 
 	return $output;
